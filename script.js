@@ -1,7 +1,7 @@
 // Personalize these with your information
-const YOUR_NAME = "Your Name"; // Replace with your name
+const YOUR_NAME = "rudra shandilya"; // Replace with your name
 const GIRLFRIEND_NAME = "SHREYA"; // Replace with your girlfriend's name
-const RELATIONSHIP_START_DATE = new Date('2024-01-01'); // Replace with when you met
+const RELATIONSHIP_START_DATE = new Date('2024-07-12'); // Replace with when you met
 
 // DOM Elements
 const girlfriendName = document.getElementById('girlfriendName');
@@ -16,8 +16,8 @@ const loveNote = document.getElementById('loveNote');
 const heartsBackground = document.getElementById('heartsBackground');
 
 // Set girlfriend's name
-girlfriendName.textContent = GIRLFRIEND_NAME;
-loveMessage.textContent = `Every day with you is a blessing, ${GIRLFRIEND_NAME}. You make my world beautiful!`;
+girlfriendName.textContent = shreya;
+loveMessage.textContent = `Every day with you is a blessing, ${SHREYU 🥰💞}. You make my world beautiful!`;
 
 // Reasons why I love you
 const reasons = [
@@ -79,7 +79,7 @@ function displayGallery() {
 // Love counter
 function updateLoveCounter() {
     const now = new Date();
-    const diff = now - RELATIONSHIP_START_DATE;
+    const diff = now - 2024-07-12;
     
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -112,22 +112,22 @@ const quizQuestions = [
     {
         question: "What's our favorite thing to do together?",
         options: ["Watch Movies", "Go for Walks", "Cuddle at Home", "All of the Above"],
-        correct: 3
+        correct: 4
     },
     {
         question: "Where did we first meet?",
-        options: ["School/College", "Online", "Through Friends", "Work"],
-        correct: 2 // Change this to the correct answer
+        options: ["School/College", "Online", "IN TRAIN", "Work"],
+        correct: 3 // Change this to the correct answer
     },
     {
         question: "What's my favorite thing about you?",
         options: ["Your Smile", "Your Personality", "Your Kindness", "Everything"],
-        correct: 3
+        correct: 1
     },
     {
         question: "What's our song?",
-        options: ["Perfect - Ed Sheeran", "All of Me - John Legend", "Thinking Out Loud - Ed Sheeran", "A Thousand Years - Christina Perri"],
-        correct: 0 // Change this to your actual song
+        options: ["Perfect by Ed Sheeran", "All of Me - John Legend", "", "A Thousand Years - Christina Perri"],
+        correct: 1 // Change this to your actual song
     }
 ];
 
@@ -256,7 +256,7 @@ window.addEventListener('load', () => {
     
     // Add romantic messages in console (for her to find)
     console.log('%c❤️ I Love You ❤️', 'color: #ff4d4d; font-size: 20px; font-weight: bold;');
-    console.log(`%c${GIRLFRIEND_NAME}, you are amazing!`, 'color: #ff9f9f; font-size: 16px;');
+    console.log(`%c${ shreya}, you are amazing!`, 'color: #ff9f9f; font-size: 16px;');
 });
 
 // Add some interactive surprises
