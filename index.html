@@ -1,289 +1,157 @@
-// No API key needed for Open-Meteo! It's completely free [citation:4]
-const BASE_URL = 'https://api.open-meteo.com/v1';
-const GEOCODING_URL = 'https://geocoding-api.open-meteo.com/v1/search';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Love ❤️</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Floating Hearts Background -->
+    <div class="hearts-background" id="heartsBackground"></div>
 
-// DOM Elements
-const cityInput = document.getElementById('cityInput');
-const searchBtn = document.getElementById('searchBtn');
-const currentLocationBtn = document.getElementById('currentLocationBtn');
-const loadingSpinner = document.getElementById('loadingSpinner');
-const currentWeather = document.getElementById('currentWeather');
-const forecastSection = document.getElementById('forecastSection');
-const errorMessage = document.getElementById('errorMessage');
-const errorText = document.getElementById('errorText');
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header Section with Romantic Title -->
+        <header class="romantic-header">
+            <h1 class="glowing-text">
+                <span class="heart-icon">❤️</span>
+                For My Beautiful Girlfriend
+                <span class="heart-icon">❤️</span>
+            </h1>
+            <p class="subtitle">Every moment with you is a treasure</p>
+        </header>
 
-// Weather display elements
-const cityName = document.getElementById('cityName');
-const dateTime = document.getElementById('dateTime');
-const weatherIcon = document.getElementById('weatherIcon');
-const temperature = document.getElementById('temperature');
-const feelsLike = document.getElementById('feelsLike');
-const weatherDesc = document.getElementById('weatherDesc');
-const humidity = document.getElementById('humidity');
-const windSpeed = document.getElementById('windSpeed');
-const pressure = document.getElementById('pressure');
-const visibility = document.getElementById('visibility');
-const forecastContainer = document.getElementById('forecastContainer');
+        <!-- Main Love Message Section -->
+        <section class="love-message-section">
+            <div class="message-card">
+                <div class="profile-photo">
+                    <!-- Add your girlfriend's photo here -->
+                    <div class="photo-placeholder">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                </div>
+                <h2 id="girlfriendName">My Love</h2>
+                <div class="romantic-message">
+                    <p id="loveMessage">You mean the world to me...</p>
+                </div>
+            </div>
+        </section>
 
-// Weather condition mapping (Open-Meteo uses WMO codes)
-const weatherCodes = {
-    0: { description: 'Clear sky', icon: '01d' },
-    1: { description: 'Mainly clear', icon: '02d' },
-    2: { description: 'Partly cloudy', icon: '03d' },
-    3: { description: 'Overcast', icon: '04d' },
-    45: { description: 'Fog', icon: '50d' },
-    48: { description: 'Depositing rime fog', icon: '50d' },
-    51: { description: 'Light drizzle', icon: '09d' },
-    53: { description: 'Moderate drizzle', icon: '09d' },
-    55: { description: 'Dense drizzle', icon: '09d' },
-    56: { description: 'Light freezing drizzle', icon: '09d' },
-    57: { description: 'Dense freezing drizzle', icon: '09d' },
-    61: { description: 'Slight rain', icon: '10d' },
-    63: { description: 'Moderate rain', icon: '10d' },
-    65: { description: 'Heavy rain', icon: '10d' },
-    66: { description: 'Light freezing rain', icon: '13d' },
-    67: { description: 'Heavy freezing rain', icon: '13d' },
-    71: { description: 'Slight snow fall', icon: '13d' },
-    73: { description: 'Moderate snow fall', icon: '13d' },
-    75: { description: 'Heavy snow fall', icon: '13d' },
-    77: { description: 'Snow grains', icon: '13d' },
-    80: { description: 'Slight rain showers', icon: '09d' },
-    81: { description: 'Moderate rain showers', icon: '09d' },
-    82: { description: 'Violent rain showers', icon: '09d' },
-    85: { description: 'Slight snow showers', icon: '13d' },
-    86: { description: 'Heavy snow showers', icon: '13d' },
-    95: { description: 'Thunderstorm', icon: '11d' },
-    96: { description: 'Thunderstorm with slight hail', icon: '11d' },
-    99: { description: 'Thunderstorm with heavy hail', icon: '11d' }
-};
+        <!-- Reasons Why I Love You -->
+        <section class="reasons-section">
+            <h2><i class="fas fa-heart"></i> Why I Love You <i class="fas fa-heart"></i></h2>
+            <div class="reasons-grid" id="reasonsGrid">
+                <!-- Reasons will be added by JavaScript -->
+            </div>
+        </section>
 
-// Event Listeners
-searchBtn.addEventListener('click', () => {
-    const city = cityInput.value.trim();
-    if (city) {
-        getCoordinatesFromCity(city);
-    } else {
-        showError('Please enter a city name');
-    }
-});
+        <!-- Love Counter -->
+        <section class="love-counter-section">
+            <div class="counter-card">
+                <h3><i class="fas fa-clock"></i> Time Since We Met</h3>
+                <div class="counter" id="loveCounter">
+                    <div class="counter-item">
+                        <span id="days">00</span>
+                        <span>Days</span>
+                    </div>
+                    <div class="counter-item">
+                        <span id="hours">00</span>
+                        <span>Hours</span>
+                    </div>
+                    <div class="counter-item">
+                        <span id="minutes">00</span>
+                        <span>Minutes</span>
+                    </div>
+                    <div class="counter-item">
+                        <span id="seconds">00</span>
+                        <span>Seconds</span>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-cityInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        const city = cityInput.value.trim();
-        if (city) {
-            getCoordinatesFromCity(city);
-        } else {
-            showError('Please enter a city name');
-        }
-    }
-});
+        <!-- Romantic Gallery -->
+        <section class="gallery-section">
+            <h2><i class="fas fa-camera-retro"></i> Our Beautiful Memories <i class="fas fa-camera-retro"></i></h2>
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- Gallery items will be added by JavaScript -->
+            </div>
+        </section>
 
-currentLocationBtn.addEventListener('click', getCurrentLocation);
+        <!-- Love Letter -->
+        <section class="love-letter-section">
+            <div class="love-letter-card">
+                <h3><i class="fas fa-envelope-open-text"></i> A Letter to You</h3>
+                <div class="love-letter-content">
+                    <p>My Dearest Love,</p>
+                    <p>Every day I wake up grateful that you're in my life. Your smile lights up my world, your laugh is my favorite melody, and your love is the greatest gift I've ever received.</p>
+                    <p>You make ordinary moments extraordinary. A simple text from you can turn my worst day into the best one. Your presence in my life has made me a better person.</p>
+                    <p>I promise to love you, cherish you, and make you happy every single day. You deserve all the love and happiness in the world, and I want to be the one to give it to you.</p>
+                    <p class="signature">Forever yours,<br>[Your Name] ❤️</p>
+                </div>
+            </div>
+        </section>
 
-// Get coordinates from city name using geocoding API
-async function getCoordinatesFromCity(city) {
-    try {
-        showLoading();
-        hideError();
-        
-        console.log('Searching for city:', city);
-        
-        const response = await fetch(
-            `${GEOCODING_URL}?name=${encodeURIComponent(city)}&count=1&language=en&format=json`
-        );
-        
-        if (!response.ok) {
-            throw new Error('Geocoding service error');
-        }
-        
-        const data = await response.json();
-        console.log('Geocoding data:', data);
-        
-        if (!data.results || data.results.length === 0) {
-            throw new Error(`City "${city}" not found`);
-        }
-        
-        const { latitude, longitude, name, country } = data.results[0];
-        
-        // Store city info for display
-        window.currentCityInfo = { name, country };
-        
-        // Get weather data using coordinates
-        getWeatherByCoordinates(latitude, longitude);
-        
-    } catch (error) {
-        console.error('Geocoding error:', error);
-        hideLoading();
-        showError(error.message);
-    }
-}
+        <!-- Love Music Player -->
+        <section class="music-section">
+            <h3><i class="fas fa-music"></i> Our Song</h3>
+            <div class="music-player">
+                <button id="playMusicBtn" class="music-btn">
+                    <i class="fas fa-play"></i> Play Our Song
+                </button>
+                <p class="song-title">"Perfect" - Ed Sheeran</p>
+            </div>
+        </section>
 
-// Get current location
-function getCurrentLocation() {
-    if (navigator.geolocation) {
-        showLoading();
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const { latitude, longitude } = position.coords;
-                window.currentCityInfo = { name: 'Your Location', country: '' };
-                getWeatherByCoordinates(latitude, longitude);
-            },
-            (error) => {
-                hideLoading();
-                switch(error.code) {
-                    case error.PERMISSION_DENIED:
-                        showError('Please allow location access to use this feature');
-                        break;
-                    case error.POSITION_UNAVAILABLE:
-                        showError('Location information is unavailable');
-                        break;
-                    case error.TIMEOUT:
-                        showError('Location request timed out');
-                        break;
-                    default:
-                        showError('An unknown error occurred');
-                }
-            }
-        );
-    } else {
-        showError('Geolocation is not supported by your browser');
-    }
-}
+        <!-- Interactive Love Quiz -->
+        <section class="quiz-section">
+            <h3><i class="fas fa-question-circle"></i> How Well Do You Know Us?</h3>
+            <div class="quiz-container" id="quizContainer">
+                <p class="quiz-question" id="quizQuestion">Loading...</p>
+                <div class="quiz-options" id="quizOptions"></div>
+                <div class="quiz-feedback" id="quizFeedback"></div>
+            </div>
+        </section>
 
-// Get weather by coordinates (Open-Meteo doesn't need an API key!) [citation:4]
-async function getWeatherByCoordinates(lat, lon) {
-    try {
-        showLoading();
-        hideError();
-        
-        console.log('Fetching weather for coordinates:', lat, lon);
-        
-        // Fetch current weather and forecast in one call
-        const response = await fetch(
-            `${BASE_URL}/forecast?latitude=${lat}&longitude=${lon}` +
-            `&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,pressure_msl,wind_speed_10m,visibility` +
-            `&daily=weather_code,temperature_2m_max,temperature_2m_min,wind_speed_10m_max` +
-            `&timezone=auto&forecast_days=5`
-        );
-        
-        if (!response.ok) {
-            throw new Error('Weather service error');
-        }
-        
-        const data = await response.json();
-        console.log('Weather data:', data);
-        
-        displayWeather(data);
-        displayForecast(data);
-        hideLoading();
-        
-    } catch (error) {
-        console.error('Weather fetch error:', error);
-        hideLoading();
-        showError(error.message);
-        currentWeather.style.display = 'none';
-        forecastSection.style.display = 'none';
-    }
-}
+        <!-- Love Notes / Messages -->
+        <section class="love-notes-section">
+            <h3><i class="fas fa-comment-dots"></i> Leave a Love Note</h3>
+            <div class="note-form">
+                <textarea id="loveNote" placeholder="Write something sweet..." rows="3"></textarea>
+                <button id="addNoteBtn" class="note-btn">Add Note</button>
+            </div>
+            <div class="notes-container" id="notesContainer">
+                <!-- Notes will appear here -->
+            </div>
+        </section>
 
-// Display current weather
-function displayWeather(data) {
-    // Display city name if available
-    if (window.currentCityInfo) {
-        cityName.textContent = window.currentCityInfo.country 
-            ? `${window.currentCityInfo.name}, ${window.currentCityInfo.country}`
-            : window.currentCityInfo.name;
-    } else {
-        cityName.textContent = 'Current Location';
-    }
-    
-    const now = new Date();
-    dateTime.textContent = now.toLocaleDateString('en-US', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-    });
-    
-    const current = data.current;
-    const weatherCode = current.weather_code;
-    const weatherInfo = weatherCodes[weatherCode] || { description: 'Unknown', icon: '01d' };
-    
-    // Use OpenWeatherMap icons (they're freely available)
-    weatherIcon.src = `https://openweathermap.org/img/wn/${weatherInfo.icon}@4x.png`;
-    weatherIcon.alt = weatherInfo.description;
-    
-    temperature.textContent = `${Math.round(current.temperature_2m)}°C`;
-    feelsLike.textContent = `Feels like ${Math.round(current.apparent_temperature)}°C`;
-    weatherDesc.textContent = weatherInfo.description;
-    
-    humidity.textContent = `${current.relative_humidity_2m}%`;
-    windSpeed.textContent = `${current.wind_speed_10m} km/h`;
-    pressure.textContent = `${Math.round(current.pressure_msl)} hPa`;
-    visibility.textContent = current.visibility ? `${(current.visibility / 1000).toFixed(1)} km` : 'N/A';
-    
-    currentWeather.style.display = 'block';
-}
+        <!-- Final Love Message -->
+        <section class="final-message">
+            <div class="message-box">
+                <h2 class="big-love-text">I LOVE YOU</h2>
+                <div class="heart-animation">
+                    <i class="fas fa-heart beating-heart"></i>
+                    <i class="fas fa-heart beating-heart"></i>
+                    <i class="fas fa-heart beating-heart"></i>
+                </div>
+                <p class="romantic-quote">"You are the best thing that's ever been mine"</p>
+            </div>
+        </section>
 
-// Display 5-day forecast
-function displayForecast(data) {
-    const daily = data.daily;
-    
-    forecastContainer.innerHTML = '';
-    
-    for (let i = 0; i < daily.time.length; i++) {
-        const date = new Date(daily.time[i]);
-        const weatherCode = daily.weather_code[i];
-        const weatherInfo = weatherCodes[weatherCode] || { description: 'Unknown', icon: '01d' };
-        
-        const card = document.createElement('div');
-        card.className = 'forecast-card';
-        
-        card.innerHTML = `
-            <div class="date">${date.toLocaleDateString('en-US', { 
-                weekday: 'short', 
-                month: 'short', 
-                day: 'numeric' 
-            })}</div>
-            <img src="https://openweathermap.org/img/wn/${weatherInfo.icon}.png" 
-                 alt="${weatherInfo.description}">
-            <div class="temp">${Math.round(daily.temperature_2m_max[i])}° / ${Math.round(daily.temperature_2m_min[i])}°</div>
-            <div class="desc">${weatherInfo.description}</div>
-            <div class="humidity">💨 ${Math.round(daily.wind_speed_10m_max[i])} km/h</div>
-        `;
-        
-        forecastContainer.appendChild(card);
-    }
-    
-    forecastSection.style.display = 'block';
-}
+        <!-- Footer -->
+        <footer>
+            <p>Made with <i class="fas fa-heart" style="color: #ff4d4d;"></i> just for you | Forever and always ❤️</p>
+        </footer>
+    </div>
 
-// Utility functions
-function showLoading() {
-    loadingSpinner.style.display = 'block';
-    currentWeather.style.display = 'none';
-    forecastSection.style.display = 'none';
-    errorMessage.style.display = 'none';
-}
+    <!-- Hidden Audio Element -->
+    <audio id="loveSong" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
 
-function hideLoading() {
-    loadingSpinner.style.display = 'none';
-}
-
-function showError(message) {
-    errorText.textContent = message;
-    errorMessage.style.display = 'flex';
-    currentWeather.style.display = 'none';
-    forecastSection.style.display = 'none';
-}
-
-function hideError() {
-    errorMessage.style.display = 'none';
-}
-
-// Initial load - show weather for a default city
-window.addEventListener('load', () => {
-    getCoordinatesFromCity('London');
-});
+    <script src="script.js"></script>
+</body>
+</html>
